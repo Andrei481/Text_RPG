@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 #include <random>
 
 class Entity {
@@ -9,8 +10,9 @@ private:
 	int max_attack_damage;
 	int min_attack_damage;
 public:
-	Entity(int hp, int atk) {
-		this->health_points = hp;
+	Entity(int max_hp, int atk) {
+		this->max_health_points = max_hp;
+		this->health_points = max_hp;
 		this->attack_damage = atk;
 		this->max_attack_damage = atk + 10;
 		this->min_attack_damage = atk - 10;
@@ -19,6 +21,10 @@ public:
 	// getters
 	int get_hp() {
 		return this->health_points;
+	}
+
+	int get_max_hp() {
+		return this->max_health_points;
 	}
 
 	int get_ad() {
@@ -35,17 +41,31 @@ public:
 	}
 
 	// utils
-	/*int generate_damage() {
-		std::uniform_int_distribution<int, int> random_attack_damage(this->max_attack_damage, this->min_attack_damage);
-		return random_attack_damage;
-	}*/
+	int generate_damage() {
+		auto now = std::chrono::system_clock::now();
+		auto time = std::chrono::system_clock::to_time_t(now);
+		auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) - 
+			std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
+
+		std::srand(ms.count());
+		int dmg = this->min_attack_damage + (std::rand() % (this->max_attack_damage - this->min_attack_damage + 1));
+		return dmg;
+	}
 
 	void take_damage(int taken_damage) {
 		this->health_points -= taken_damage;
+
+		if (this->health_points < 0) {
+			this->health_points = 0;
+		}
 	}
 
 	void heal(int healed_amount) {
 		this->health_points += healed_amount;
+
+		if (this->health_points > this->max_health_points) {
+			this->health_points = this->max_health_points;
+		}
 	}
 
 	void increase_ad(int increase_amount) {
