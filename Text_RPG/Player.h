@@ -76,4 +76,10 @@ public:
 		enemy.take_damage(spells[spell_index].get_spell_damage());
 		this->decrease_mp(spells[spell_index].get_spell_cost());
 	}
+
+	void restore_mp() {
+		this->magic_points += 40;
+		if (this->magic_points > this->max_magic_points) 
+			this->magic_points = max_magic_points;
+	}
 };

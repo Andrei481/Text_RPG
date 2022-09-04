@@ -2,16 +2,15 @@
 #include "Colors.h"
 #include "Entity.h"
 #include "Player.h"
-#include "spells_potions.h"
+#include "spells.h"
 
 bool running = true;
 
-void choose_action(Player& entity_1, Entity& entity_2);
 
 int choose_magic_spell(Player player) {
 	int chosen_spell, chosen_spell_index;
 	if (player.get_cheapest_spell_cost() > player.get_mp()) {
-		//std::cout << YELLOW << "You don't have enough magic points to cast any spells right now" << RESET << std::endl;
+		std::cout << YELLOW << "You don't have enough magic points to cast any spells right now" << RESET << std::endl;
 		return -1;
 	}
 	while (true) {
@@ -37,33 +36,39 @@ int choose_magic_spell(Player player) {
 }
 
 void choose_action(Player &entity_1, Entity &entity_2) {
+	int choice, chosen_spell_index;
+	entity_1.restore_mp(); // restore 40 MP at the start of every turn
+
 	std::cout << YELLOW << "Choose your action:" << RESET << std::endl;
 	std::cout << "1. Attack" << std::endl << "2. Magic" << std::endl << "3. Heal (50 HP)" << std::endl;
-	int choice, chosen_spell_index;
 	std::cin >> choice;
+
 	switch (choice) {
 		case 1:
 			entity_1.generate_damage();
 			std::cout << YELLOW << "Player hit enemy for " << MAGENTA << entity_1.generate_damage() << RESET << YELLOW << " points of damage!" << RESET << std::endl;
 			entity_2.take_damage(entity_1.generate_damage());
 			break;
+
 		case 2:
 			std::cout << BLUE << "Magic Spells: " << RESET << std::endl;
-			entity_1.display_spells();
 			std::cout << BLUE << "MP: " << entity_1.get_mp() << "/" << entity_1.get_max_mp() << RESET << std::endl;
+			entity_1.display_spells();
 			chosen_spell_index = choose_magic_spell(entity_1);
-			if (chosen_spell_index == -1) {
-				std::cout << YELLOW << "You don't have enough magic points to cast any spells right now." << RESET << std::endl;
+
+			if (chosen_spell_index == -1 || chosen_spell_index == 0) {
 				return choose_action(entity_1, entity_2);
 			}
 			entity_1.use_spell(chosen_spell_index, entity_2);
 			std::cout << YELLOW << "Player hit enemy for " << MAGENTA << entity_1.get_spell_at_index(chosen_spell_index).get_spell_damage() << YELLOW
 				<< " points of magic damage!" << RESET << std::endl;
 			break;
+
 		case 3:
 			entity_1.heal(50);
 			std::cout << GREEN << "Player healed for 50 HP!" << RESET << std::endl;
 			break;
+
 		default:
 			std::cout << "Invalid choice";
 			break;
@@ -72,8 +77,8 @@ void choose_action(Player &entity_1, Entity &entity_2) {
 
 void display_current_hp(Entity entity_1, Entity entity_2) {
 	std::cout << std::endl;
-	std::cout << RED << "Player HP: " << entity_1.get_hp() << "/" << entity_1.get_max_hp() << RESET << std::endl;
-	std::cout << RED << "Enemy HP: " << entity_2.get_hp() << "/" << entity_2.get_max_hp() << RESET << std::endl;
+	std::cout << "Player HP: \t" << RED << entity_1.get_hp() << "/" << entity_1.get_max_hp() << RESET << std::endl;
+	std::cout << "Enemy HP: \t" << RED << entity_2.get_hp() << "/" << entity_2.get_max_hp() << RESET << std::endl;
 	std::cout << std::endl;
 }
 
@@ -89,7 +94,7 @@ int main() {
 
 		if (enemy.get_hp() == 0) {
 			std::cout << BLUE << "You have slain your enemy!" << RESET << std::endl;
-			running = false;
+			break;
 		}
 
 		player.take_damage(enemy.generate_damage());
@@ -98,7 +103,7 @@ int main() {
 
 		if (player.get_hp() == 0) {
 			std::cout << RED << "You have been slain!" << RESET << std::endl;
-			running = false;
+			break;
 		}
 	}
 }

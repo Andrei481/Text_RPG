@@ -26,7 +26,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Spell.h" />
-    <ClInclude Include="spells_potions.h" />
+    <ClInclude Include="spells.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
