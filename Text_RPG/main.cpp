@@ -6,9 +6,14 @@
 
 bool running = true;
 
+void choose_action(Player& entity_1, Entity& entity_2);
+
 int choose_magic_spell(Player player) {
 	int chosen_spell, chosen_spell_index;
-	//if (player.get_cheapest_spell_cost() > player.get_mp()) choose_action(player,);
+	if (player.get_cheapest_spell_cost() > player.get_mp()) {
+		//std::cout << YELLOW << "You don't have enough magic points to cast any spells right now" << RESET << std::endl;
+		return -1;
+	}
 	while (true) {
 		std::cout << YELLOW << "Choose your spell: " << RESET << std::endl;
 		std::cin >> chosen_spell;
@@ -47,6 +52,10 @@ void choose_action(Player &entity_1, Entity &entity_2) {
 			entity_1.display_spells();
 			std::cout << BLUE << "MP: " << entity_1.get_mp() << "/" << entity_1.get_max_mp() << RESET << std::endl;
 			chosen_spell_index = choose_magic_spell(entity_1);
+			if (chosen_spell_index == -1) {
+				std::cout << YELLOW << "You don't have enough magic points to cast any spells right now." << RESET << std::endl;
+				return choose_action(entity_1, entity_2);
+			}
 			entity_1.use_spell(chosen_spell_index, entity_2);
 			std::cout << YELLOW << "Player hit enemy for " << MAGENTA << entity_1.get_spell_at_index(chosen_spell_index).get_spell_damage() << YELLOW
 				<< " points of magic damage!" << RESET << std::endl;
