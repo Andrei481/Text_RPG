@@ -1,3 +1,6 @@
+#ifndef Entity_HEADER
+#define Entity_HEADER
+
 #include <iostream>
 #include <chrono>
 #include <random>
@@ -71,5 +74,6 @@ public:
 	void increase_ad(int increase_amount) {
 		this->attack_damage += increase_amount;
 	}
-
 };
+
+#endif
