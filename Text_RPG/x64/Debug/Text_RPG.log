@@ -1,7 +1,8 @@
 ﻿  main.cpp
-D:\Code\GitHub\Text_RPG\Text_RPG\Entity.h(50,22): warning C4244: 'argument': conversion from '_Rep' to 'unsigned int', possible loss of data
+D:\Code\GitHub\Text_RPG\Text_RPG\Entity.h(53,22): warning C4244: 'argument': conversion from '_Rep' to 'unsigned int', possible loss of data
           with
           [
               _Rep=__int64
           ]
+D:\Code\GitHub\Text_RPG\Text_RPG\Player.h(34,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
   Text_RPG.vcxproj -> D:\Code\GitHub\Text_RPG\x64\Debug\Text_RPG.exe
