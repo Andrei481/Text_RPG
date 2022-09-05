@@ -70,7 +70,8 @@ void choose_action(Player &entity_1, Entity &entity_2) {
 			break;
 
 		default:
-			std::cout << "Invalid choice";
+			std::cout << YELLOW << "Invalid choice" << RESET << std::endl;
+			choose_action(entity_1, entity_2);
 			break;
 	}
 }
